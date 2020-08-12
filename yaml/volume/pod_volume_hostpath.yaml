@@ -1,0 +1,38 @@
+# hostPath : docker -v 와 같음, 동적 volume 생성 가능 
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-hostpath-volume-pod
+spec:
+  containers:
+  - image: xiilab/nvidia
+    name: testhi
+    args: ["sh", "-c", "tail -f /dev/null"]
+#     env:
+#     - name: NVIDIA_VISIBLE_DEVICES
+#       value: "1"
+#     args: ["sh", "-c", "nvidia-smi && tail -f /dev/null"]
+#     resources:
+#       limits:
+#         nvidia.com/gpu: 1
+    volumeMounts:
+    - mountPath: /root/user_data
+      name: user-volume
+    - mountPath: /root/user_data2
+      name: user2-volume
+      readOnly: true
+  nodeName: sol1-nvidia
+  volumes:
+  - name: user-volume
+    hostPath:
+      path: /root/Uyuni/users/user1
+      type: Directory
+  - name: user2-volume
+    hostPath:
+      path: /root/Uyuni/users/user2
+      type: Directory
+  
+      
+      
+      
+      

@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: c
+spec:
+  containers:
+  - name: c
+    image: xiilab/nvidia
+    env:
+    - name: NVIDIA_VISIBLE_DEVICES
+      value: "0"
+    args: ["sh", "-c", "nvidia-smi && tail -f /dev/null"]
+# python -c 'import tensorflow as tf; tf.Session()'
+#     args: ["python", "-c", "'import tensorflow as tf; tf.Session()'"]
+    resources:
+      limits:
+        nvidia.com/gpu: 1
+  nodeName: sol1-nvidia
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: d
+spec:
+  containers:
+  - name: d
+    image: xiilab/nvidia
+    env:
+    - name: NVIDIA_VISIBLE_DEVICES
+      value: "1"
+    args: ["sh", "-c", "nvidia-smi && tail -f /dev/null"]
+    resources:
+      limits:
+        nvidia.com/gpu: 1
+  nodeName: sol1-nvidia2

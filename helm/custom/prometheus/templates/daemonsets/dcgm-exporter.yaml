@@ -1,0 +1,42 @@
+{{- if .Values.dcgmExporter.enabled -}}
+apiVersion: {{ template "prometheus.daemonset.apiVersion" . }}
+kind: DaemonSet
+metadata:
+  name: {{ template "prometheus.dcgmExporter.fullname" . }}
+  labels:
+    {{- include "prometheus.dcgmExporter.labels" . | nindent 4 }}
+spec:
+  updateStrategy:
+{{ toYaml .Values.dcgmExporter.updateStrategy | indent 4 }}
+  selector:
+    matchLabels:
+      {{- include "prometheus.dcgmExporter.matchLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "prometheus.dcgmExporter.labels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: {{ template "prometheus.name" . }}-{{ .Values.dcgmExporter.name }}
+        image: "{{ .Values.dcgmExporter.image.repository }}:{{ .Values.dcgmExporter.image.tag }}"
+        imagePullPolicy: "{{ .Values.dcgmExporter.image.pullPolicy }}"
+        env:
+        - name: "DCGM_EXPORTER_LISTEN"
+          value: ":{{ .Values.dcgmExporter.env.listenPort }}"
+        - name: "DCGM_EXPORTER_KUBERNETES"
+          value: "{{ .Values.dcgmExporter.env.kubernetes }}"
+        ports:
+        - name: "metrics"
+          containerPort: {{ .Values.dcgmExporter.port.containerPort }}
+        securityContext:
+          runAsNonRoot: {{ .Values.dcgmExporter.securityContext.runAsNonRoot }}
+          runAsUser: {{ .Values.dcgmExporter.securityContext.runAsUser }}
+        volumeMounts:
+        - name: "pod-gpu-resources"
+          readOnly: true
+          mountPath: {{ .Values.dcgmExporter.volume.podGpuResourcesPath }}
+      volumes:
+      - name: "pod-gpu-resources"
+        hostPath:
+          path: {{ .Values.dcgmExporter.volume.podGpuResourcesPath }}
+{{- end -}}

@@ -1,0 +1,136 @@
+
+nodeExporter:
+  ## If false, node-exporter will not be installed
+  ##
+  enabled: true
+
+  ## If true, node-exporter pods share the host network namespace
+  ##
+  hostNetwork: true
+
+  ## If true, node-exporter pods share the host PID namespace
+  ##
+  hostPID: true
+
+  ## node-exporter container name
+  ##
+  name: node-exporter
+
+  ## node-exporter container image
+  ##
+  image:
+    repository: prom/node-exporter
+    tag: v1.0.1
+    pullPolicy: IfNotPresent
+
+  ## Specify if a Pod Security Policy for node-exporter must be created
+  ## Ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
+  ##
+  podSecurityPolicy:
+    annotations: {}
+      ## Specify pod annotations
+      ## Ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#apparmor
+      ## Ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#seccomp
+      ## Ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#sysctl
+      ##
+      # seccomp.security.alpha.kubernetes.io/allowedProfileNames: '*'
+      # seccomp.security.alpha.kubernetes.io/defaultProfileName: 'docker/default'
+      # apparmor.security.beta.kubernetes.io/defaultProfileName: 'runtime/default'
+
+  ## node-exporter priorityClassName
+  ##
+  priorityClassName: ""
+
+  ## Custom Update Strategy
+  ##
+  updateStrategy:
+    type: RollingUpdate
+
+  ## Additional node-exporter container arguments
+  ##
+  extraArgs: {}
+
+  ## Additional InitContainers to initialize the pod
+  ##
+  extraInitContainers: []
+
+  ## Additional node-exporter hostPath mounts
+  ##
+  extraHostPathMounts: []
+    # - name: textfile-dir
+    #   mountPath: /srv/txt_collector
+    #   hostPath: /var/lib/node-exporter
+    #   readOnly: true
+    #   mountPropagation: HostToContainer
+
+  extraConfigmapMounts: []
+    # - name: certs-configmap
+    #   mountPath: /prometheus
+    #   configMap: certs-configmap
+    #   readOnly: true
+
+  ## Node tolerations for node-exporter scheduling to nodes with taints
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+  ##
+  tolerations: []
+    # - key: "key"
+    #   operator: "Equal|Exists"
+    #   value: "value"
+    #   effect: "NoSchedule|PreferNoSchedule|NoExecute(1.6 only)"
+
+  ## Node labels for node-exporter pod assignment
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+
+  ## Annotations to be added to node-exporter pods
+  ##
+  podAnnotations: {}
+
+  ## Labels to be added to node-exporter pods
+  ##
+  pod:
+    labels: {}
+
+  ## PodDisruptionBudget settings
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
+  ##
+  podDisruptionBudget:
+    enabled: false
+    maxUnavailable: 1
+
+  ## node-exporter resource limits & requests
+  ## Ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources: {}
+    # limits:
+    #   cpu: 200m
+    #   memory: 50Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 30Mi
+
+  ## Security context to be added to node-exporter pods
+  ##
+  securityContext: {}
+    # runAsUser: 0
+
+  service:
+    annotations:
+      prometheus.io/scrape: "true"
+    labels: {}
+
+    # Exposed as a headless service:
+    # https://kubernetes.io/docs/concepts/services-networking/service/#headless-services
+    clusterIP: None
+
+    ## List of IP addresses at which the node-exporter service is available
+    ## Ref: https://kubernetes.io/docs/user-guide/services/#external-ips
+    ##
+    externalIPs: []
+
+    hostPort: 9100
+    loadBalancerIP: ""
+    loadBalancerSourceRanges: []
+    servicePort: 9100
+    type: ClusterIP

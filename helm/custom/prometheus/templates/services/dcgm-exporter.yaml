@@ -1,0 +1,21 @@
+{{- if .Values.dcgmExporter.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "prometheus.dcgmExporter.fullname" . }}
+  labels:
+    {{- include "prometheus.dcgmExporter.labels" . | nindent 4 }}
+{{- if .Values.dcgmExporter.service.annotations }}
+  annotations:
+{{ toYaml .Values.dcgmExporter.service.annotations | indent 4 }}
+{{- end }}
+spec:
+  ports:
+  - name: metrics
+    port: {{ .Values.dcgmExporter.service.servicePort }}
+    protocol: TCP
+    targetPort: {{ .Values.dcgmExporter.port.containerPort }}
+  selector:
+    {{- include "prometheus.dcgmExporter.matchLabels" . | nindent 4 }}
+  type: {{ .Values.dcgmExporter.port.type }}
+{{- end -}}

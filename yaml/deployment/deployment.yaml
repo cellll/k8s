@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: multi-test
+  labels:
+    app: hi
+spec:
+  selector:
+    matchLabels:
+      app: hi
+  template:
+    metadata:
+      labels:
+        app: hi
+    spec:
+      containers:
+      - name: test1
+        image: xiilab/nvidia_e
+        args: ["sh", "-c", "tail -f /dev/null"]
+      nodeName: sol1-nvidia
