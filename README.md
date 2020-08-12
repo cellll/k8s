@@ -33,30 +33,30 @@
 
 * CPU Usage
 	* node\_cpu\_seconds_total
-	* (%) : 
+	* (%) : 100 - (avg by (kubernetes_node) (irate(node\_cpu\_seconds\_total{mode="idle"}[1m])) * 100)
 
 
 * Memory Usage
 	* node\_memory\_MemTotal\_bytes - node\_memory\_MemFree\_bytes - node\_memory\_Buffers\_bytes - node\_memory\_Cached\_bytes - node\_memory\_Slab\_bytes
 	
-	* (%) : 
+	* (%) : ((node_memory\_MemTotal\_bytes - avg\_over\_time(node\_memory\_MemFree\_bytes[1m]) -  avg\_over\_time(node\_memory\_Buffers\_bytes[1m]) - avg\_over\_time(node\_memory\_Cached\_bytes[1m]) - avg\_over\_time(node\_memory\_Slab\_bytes[1m])) / node\_memory\_MemTotal\_bytes) * 100
 
 
 * Disk Read Bytes (bytes)
 	* node\_disk\_read\_bytes\_total
- 
+ 	* current : rate(node\_disk\_read\_bytes\_total[1m])
 
 * Disk Written Bytes (bytes)
  	* node\_disk\_written\_bytes\_total
-
+ 	* current : rate(node\_disk\_written\_bytes\_total[1m])
 
 * Network Receive Bytes (bytes)
 	* node\_network\_receive\_bytes\_total
-
+	* current : (rate(node\_network\_receive\_bytes\_total{device="\<NET_INTERFACE\>"}[1m]))
 
 * Network Transmit Bytes (bytes)
 	* node\_network\_transmit\_bytes\_total
-
+	* current : (rate(node\_network\_transmit\_bytes\_total{device="\<NET_INTERFACE\>"}[1m]))
 
 * GPU Utilization Usage (%)
 	* DCGM\_FI\_DEV\_GPU\_UTIL
@@ -65,4 +65,3 @@
 * GPU Memory Usage
 	* DCGM\_FI\_DEV\_FB\_USED
 	* (%) : DCGM\_FI\_DEV\_FB\_USED / ( DCGM\_FI\_DEV\_FB\_USED + DCGM\_FI\_DEV\_FB\_FREE )
-
