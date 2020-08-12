@@ -22,8 +22,13 @@ dcgmExporter:
   volume:
     podGpuResourcesPath: "/var/lib/kubelet/pod-resources"
   service:
+    type: NodePort
     servicePort: 9400
-    type: ClusterIP
+    nodePort: 32700
+
+    
+#     servicePort: 9400
+#     type: ClusterIP
     
     
     

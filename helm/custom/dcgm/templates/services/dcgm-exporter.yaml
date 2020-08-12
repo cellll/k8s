@@ -4,12 +4,15 @@ kind: Service
 metadata:
   name: {{ template "prometheus.dcgmExporter.fullname" . }}
 spec:
+  type: "{{ .Values.dcgmExporter.service.type }}"
   ports:
   - name: metrics
     port: {{ .Values.dcgmExporter.service.servicePort }}
     protocol: TCP
-    targetPort: {{ .Values.dcgmExporter.port.containerPort }}
+    targetPort: {{ .Values.dcgmExporter.service.servicePort }}
+  {{- if contains "NodePort" .Values.dcgmExporter.service.type }}
+    nodePort: {{ .Values.dcgmExporter.service.nodePort }}
+  {{- end }}
   selector:
     {{- include "prometheus.dcgmExporter.matchLabels" . | nindent 4 }}
-  type: {{ .Values.dcgmExporter.port.type }}
 {{- end -}}
