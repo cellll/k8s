@@ -74,7 +74,7 @@
 
 * CPU Usage
 	* container\_cpu\_usage\_seconds\_total
-	* **example (%)** : sum by (container_name) (irate(container\_cpu\_usage\_seconds\_total{container\_name="uyuni-instance-24-master"}[2m])) * 100
+	* **example (%)** : sum by (container_name) (irate(container\_cpu\_usage\_seconds\_total{container\_name=<CONTAINER_NAME>}[2m])) * 100
 	
 * Memory Usage
 	* container\_memory\_usage\_bytes
@@ -82,19 +82,19 @@
 
 * Disk Read Bytes
 	* container\_network\_receive\_bytes\_total
-	* **example (bytes) hostNetwork: false** : rate(container\_network\_receive\_bytes\_total{pod="uyuni-instance-24-master",interface="eth0"}[1m])
-	* **example (bytes) hostNetwork: true** : rate(container\_network\_receive\_bytes\_total{pod="uyuni-instance-24-master",kubernetes\_io\_hostname="\<SERVER_HOSTNAME\>",interface="\<NET\_INTERFACE\>"}[1m])
+	* **example (bytes) hostNetwork: false** : rate(container\_network\_receive\_bytes\_total{pod=<CONTAINER_NAME>,interface="eth0"}[1m])
+	* **example (bytes) hostNetwork: true** : rate(container\_network\_receive\_bytes\_total{pod=<CONTAINER_NAME>,kubernetes\_io\_hostname="\<SERVER_HOSTNAME\>",interface="\<NET\_INTERFACE\>"}[1m])
 
 * Disk Written Bytes
 	* container\_network\_transmit\_bytes\_total
-	* **example (bytes) hostNetwork: false** : rate(container\_network\_transmit\_bytes\_total{pod="uyuni-instance-24-master",interface="eth0"}[1m])
-	* **example (bytes) hostNetwork: true** : rate(container\_network\_transmit\_bytes\_total{pod="uyuni-instance-24-master",kubernetes\_io\_hostname="\<SERVER_HOSTNAME\>",interface="\<NET\_INTERFACE\>"}[1m])
+	* **example (bytes) hostNetwork: false** : rate(container\_network\_transmit\_bytes\_total{pod=<CONTAINER_NAME>,interface="eth0"}[1m])
+	* **example (bytes) hostNetwork: true** : rate(container\_network\_transmit\_bytes\_total{pod=<CONTAINER_NAME>,kubernetes\_io\_hostname="\<SERVER_HOSTNAME\>",interface="\<NET\_INTERFACE\>"}[1m])
 
 * Network Receive Bytes
 	* container\_fs\_reads\_bytes\_total
-	* **example (bytes)** : rate(container\_fs\_reads\_bytes\_total{kubernetes\_io\_hostname="\<SERVER_HOSTNAME\>",container\_name="uyuni-instance-24-master"}[1m])
+	* **example (bytes)** : rate(container\_fs\_reads\_bytes\_total{kubernetes\_io\_hostname="\<SERVER_HOSTNAME\>",container\_name=<CONTAINER_NAME>}[1m])
 
 
 * Network Transmit Bytes
 	* container\_fs\_writes\_bytes\_total
-	* **example (bytes)** : rate(container\_fs\_writes\_bytes\_total{kubernetes\_io\_hostname="\<SERVER_HOSTNAME\>",container\_name="uyuni-instance-24-master"}[1m])
+	* **example (bytes)** : rate(container\_fs\_writes\_bytes\_total{kubernetes\_io\_hostname="\<SERVER_HOSTNAME\>",container\_name=<CONTAINER_NAME>}[1m])
