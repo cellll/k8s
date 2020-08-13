@@ -29,39 +29,72 @@
 
 ---
 
-##### Metric
+##### Host Metric
+
+> "node" -> "kubernetes_node"
 
 * CPU Usage
 	* node\_cpu\_seconds_total
-	* (%) : 100 - (avg by (kubernetes_node) (irate(node\_cpu\_seconds\_total{mode="idle"}[1m])) * 100)
+	* **example (%)** : 100 - (avg by (kubernetes_node) (irate(node\_cpu\_seconds\_total{mode="idle"}[1m])) * 100)
 
 
 * Memory Usage
 	* node\_memory\_MemTotal\_bytes - node\_memory\_MemFree\_bytes - node\_memory\_Buffers\_bytes - node\_memory\_Cached\_bytes - node\_memory\_Slab\_bytes
 	
-	* (%) : ((node_memory\_MemTotal\_bytes - avg\_over\_time(node\_memory\_MemFree\_bytes[1m]) -  avg\_over\_time(node\_memory\_Buffers\_bytes[1m]) - avg\_over\_time(node\_memory\_Cached\_bytes[1m]) - avg\_over\_time(node\_memory\_Slab\_bytes[1m])) / node\_memory\_MemTotal\_bytes) * 100
+	* **example (%)** : ((node_memory\_MemTotal\_bytes - avg\_over\_time(node\_memory\_MemFree\_bytes[1m]) -  avg\_over\_time(node\_memory\_Buffers\_bytes[1m]) - avg\_over\_time(node\_memory\_Cached\_bytes[1m]) - avg\_over\_time(node\_memory\_Slab\_bytes[1m])) / node\_memory\_MemTotal\_bytes) * 100
 
 
 * Disk Read Bytes (bytes)
 	* node\_disk\_read\_bytes\_total
- 	* current : rate(node\_disk\_read\_bytes\_total[1m])
+ 	* **example (bytes)** : rate(node\_disk\_read\_bytes\_total[1m])
 
 * Disk Written Bytes (bytes)
  	* node\_disk\_written\_bytes\_total
- 	* current : rate(node\_disk\_written\_bytes\_total[1m])
+ 	* **example (bytes)** : rate(node\_disk\_written\_bytes\_total[1m])
 
 * Network Receive Bytes (bytes)
 	* node\_network\_receive\_bytes\_total
-	* current : (rate(node\_network\_receive\_bytes\_total{device="\<NET_INTERFACE\>"}[1m]))
+	* **example (bytes)** : (rate(node\_network\_receive\_bytes\_total{device="\<NET_INTERFACE\>"}[1m]))
 
 * Network Transmit Bytes (bytes)
 	* node\_network\_transmit\_bytes\_total
-	* current : (rate(node\_network\_transmit\_bytes\_total{device="\<NET_INTERFACE\>"}[1m]))
+	* **example (bytes)** : (rate(node\_network\_transmit\_bytes\_total{device="\<NET_INTERFACE\>"}[1m]))
 
 * GPU Utilization Usage (%)
 	* DCGM\_FI\_DEV\_GPU\_UTIL
-
+	* **example (%)** : max\_over\_time(DCGM\_FI\_DEV\_GPU\_UTIL[1m])
 
 * GPU Memory Usage
 	* DCGM\_FI\_DEV\_FB\_USED
-	* (%) : DCGM\_FI\_DEV\_FB\_USED / ( DCGM\_FI\_DEV\_FB\_USED + DCGM\_FI\_DEV\_FB\_FREE )
+	* **example (%)** : max\_over\_time(DCGM\_FI\_DEV\_FB\_USED[1m]) / (max\_over\_time(DCGM\_FI\_DEV\_FB\_USED[1m]) + min\_over\_time(DCGM\_FI\_DEV\_FB\_FREE[1m]))
+
+
+
+##### Container Metric
+
+* CPU Usage
+	* container\_cpu\_usage\_seconds\_total
+	* **example (%)** : sum by (container_name) (irate(container\_cpu\_usage\_seconds\_total{container\_name="uyuni-instance-24-master"}[2m])) * 100
+	
+* Memory Usage
+	* container\_memory\_usage\_bytes
+	* **example (%)** : (max\_over\_time(container\_memory\_usage\_bytes{container\_name="hi1"}[15s]) / on(kubernetes\_io\_hostname) group_left() machine\_memory\_bytes) * 100
+
+* Disk Read Bytes
+	* container\_network\_receive\_bytes\_total
+	* **example (bytes) Single** : rate(container\_network\_receive\_bytes\_total{pod="uyuni-instance-24-master",interface="eth0"}[1m])
+	* **example (bytes) Multi** : rate(container\_network\_receive\_bytes\_total{pod="uyuni-instance-24-master",kubernetes\_io\_hostname="\<SERVER_HOSTNAME\>",interface="\<NET\_INTERFACE\>"}[1m])
+
+* Disk Written Bytes
+	* container\_network\_transmit\_bytes\_total
+	* **example (bytes) Single** : rate(container\_network\_transmit\_bytes\_total{pod="uyuni-instance-24-master",interface="eth0"}[1m])
+	* **example (bytes) Multi** : rate(container\_network\_transmit\_bytes\_total{pod="uyuni-instance-24-master",kubernetes\_io\_hostname="\<SERVER_HOSTNAME\>",interface="\<NET\_INTERFACE\>"}[1m])
+
+* Network Receive Bytes
+	* container\_fs\_reads\_bytes\_total
+	* **example (bytes)** : rate(container\_fs\_reads\_bytes\_total{kubernetes\_io\_hostname="\<SERVER_HOSTNAME\>",container\_name="uyuni-instance-24-master"}[1m])
+
+
+* Network Transmit Bytes
+	* container\_fs\_writes\_bytes\_total
+	* **example (bytes)** : rate(container\_fs\_writes\_bytes\_total{kubernetes\_io\_hostname="\<SERVER_HOSTNAME\>",container\_name="uyuni-instance-24-master"}[1m])
