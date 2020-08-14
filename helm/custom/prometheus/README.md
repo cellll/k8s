@@ -3,6 +3,9 @@
 
 ##### 실행
 
+	$ kubectl create -f volume_templates/storageclass.yaml
+	$ kubectl create -f volume_templates/persistentvolume.yaml
+	$ kubectl create -f volume_templates/persistentvolumeclaim.yaml
 	$ helm install <RELEASE_NAME> .
 	
 	$ kubectl get pod 
